@@ -89,10 +89,10 @@ const getFilteredNavItems = (userRole: string | undefined): NavItem[] => {
       },
       {
         icon: <GroupIcon />,
-        name: "Tài khoản",
+        name: "Người dùng",
         subItems: [
           { name: "Quản lý tài khoản", path: "/admin/accounts" },
-          { name: "Quản lý nhóm", path: "/admin/groups" },
+          { name: "Quản lý bộ phận", path: "/admin/groups" },
         ],
       },
       {

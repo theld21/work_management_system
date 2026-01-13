@@ -221,7 +221,7 @@ export const GroupDetailModal: React.FC<GroupDetailModalProps> = ({
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Chi tiết nhóm: {group.name}
+            Chi tiết bộ phận: {group.name}
           </h2>
           <button
             onClick={onClose}
@@ -294,7 +294,7 @@ export const GroupDetailModal: React.FC<GroupDetailModalProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Tên nhóm
+                  Tên bộ phận
                 </label>
                 <input
                   type="text"
@@ -328,7 +328,7 @@ export const GroupDetailModal: React.FC<GroupDetailModalProps> = ({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Nhóm cha
+                Bộ phận cha
               </label>
               <select
                 value={editFormData.parentGroupId}
@@ -336,7 +336,7 @@ export const GroupDetailModal: React.FC<GroupDetailModalProps> = ({
                 disabled={loading}
                 className="block w-full rounded-md border-gray-300 shadow-sm p-2 focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm disabled:opacity-50"
               >
-                <option value="">Không có nhóm cha</option>
+                <option value="">Không có bộ phận cha</option>
                 {allGroups.filter(g => g._id !== group._id).map((grp) => (
                   <option key={grp._id} value={grp._id}>
                     {grp.name}
@@ -405,7 +405,7 @@ export const GroupDetailModal: React.FC<GroupDetailModalProps> = ({
                     Đang cập nhật...
                   </>
                 ) : (
-                  'Cập nhật nhóm'
+                  'Cập nhật bộ phận'
                 )}
               </button>
             </div>
@@ -416,7 +416,7 @@ export const GroupDetailModal: React.FC<GroupDetailModalProps> = ({
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                Thành viên nhóm
+                Thành viên bộ phận
               </h3>
               <button
                 onClick={() => setShowAddMember(!showAddMember)}
@@ -453,7 +453,7 @@ export const GroupDetailModal: React.FC<GroupDetailModalProps> = ({
                 ))
               ) : (
                 <div className="text-center text-gray-500 dark:text-gray-400 py-8">
-                  Không có thành viên trong nhóm này
+                  Không có thành viên trong bộ phận này
                 </div>
               )}
             </div>

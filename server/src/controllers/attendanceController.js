@@ -1,7 +1,17 @@
 const { validationResult } = require("express-validator");
 const Attendance = require("../models/Attendance");
 const Request = require("../models/Request");
-const { isIPAllowed, getClientIP } = require("../utils/ipUtils");
+
+
+
+const getClientIP = (req) => {
+  const ip = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
+    req.socket.remoteAddress ||
+    req.ip ||
+    "";
+  if (ip.startsWith("::ffff:")) return ip.substring(7);
+  return ip;
+};
 
 /**
  * Hàm hỗ trợ để lấy ngày bắt đầu và kết thúc của một ngày từ checkIn time
@@ -26,19 +36,20 @@ exports.checkIn = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Check IP restrictions
-    const ipCheck = isIPAllowed(req);
-    if (!ipCheck.isAllowed) {
-      console.log(
-        `[CHECK-IN BLOCKED] User: ${req.user.id}, IP: ${ipCheck.clientIP}, Reason: ${ipCheck.reason}`
-      );
-      return res.status(403).json({
-        message: "Không thể chấm công từ vị trí này",
-        details: "Bạn chỉ có thể chấm công khi kết nối từ mạng công ty",
-        clientIP: ipCheck.clientIP,
-        reason: ipCheck.reason,
-      });
+    // Check IP
+    const allowedIP = process.env.ALLOWED_IP;
+    if (allowedIP) {
+      const clientIP = getClientIP(req);
+      if (clientIP !== allowedIP) {
+        return res.status(403).json({
+          message: "Không thể chấm công từ vị trí này",
+          details: "IP hiện tại không khớp với IP công ty",
+          clientIP: clientIP,
+        });
+      }
     }
+
+
 
     const userId = req.user.id;
     const now = new Date();
@@ -67,9 +78,7 @@ exports.checkIn = async (req, res) => {
 
     // Log successful check-in with IP info
     console.log(
-      `[CHECK-IN SUCCESS] User: ${req.user.id}, IP: ${
-        ipCheck.clientIP
-      }, Time: ${now.toISOString()}`
+      `[CHECK-IN SUCCESS] User: ${req.user.id}, Time: ${now.toISOString()}`
     );
 
     res.status(201).json(newAttendance);
@@ -87,18 +96,19 @@ exports.checkOut = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Check IP restrictions
-    const ipCheck = isIPAllowed(req);
-    if (!ipCheck.isAllowed) {
-      console.log(
-        `[CHECK-OUT BLOCKED] User: ${req.user.id}, IP: ${ipCheck.clientIP}, Reason: ${ipCheck.reason}`
-      );
-      return res.status(403).json({
-        message: "Không thể chấm công từ vị trí này",
-        details: "Bạn chỉ có thể chấm công khi kết nối từ mạng công ty",
-        clientIP: ipCheck.clientIP,
-        reason: ipCheck.reason,
-      });
+
+
+    // Check IP
+    const allowedIP = process.env.ALLOWED_IP;
+    if (allowedIP) {
+      const clientIP = getClientIP(req);
+      if (clientIP !== allowedIP) {
+        return res.status(403).json({
+          message: "Không thể chấm công từ vị trí này",
+          details: "IP hiện tại không khớp với IP công ty",
+          clientIP: clientIP,
+        });
+      }
     }
 
     const userId = req.user.id;
@@ -128,9 +138,7 @@ exports.checkOut = async (req, res) => {
 
     // Log successful check-out with IP info
     console.log(
-      `[CHECK-OUT SUCCESS] User: ${req.user.id}, IP: ${
-        ipCheck.clientIP
-      }, Time: ${now.toISOString()}`
+      `[CHECK-OUT SUCCESS] User: ${req.user.id}, Time: ${now.toISOString()}`
     );
 
     res.json(attendance);
@@ -321,7 +329,7 @@ exports.getTeamAttendance = async (req, res) => {
       const group = await Group.findById(groupId);
 
       if (!group) {
-        return res.status(404).json({ message: "Nhóm không tồn tại" });
+        return res.status(404).json({ message: "bộ phận không tồn tại" });
       }
 
       query.user = { $in: group.members };
@@ -734,34 +742,7 @@ exports.getAttendanceReport = async (req, res) => {
   }
 };
 
-// Get IP information for debugging (admin only)
-exports.getIPInfo = async (req, res) => {
-  try {
-    // Verify the user is admin
-    if (req.user.role !== "admin") {
-      return res.status(403).json({ message: "Không có quyền truy cập" });
-    }
 
-    const ipCheck = isIPAllowed(req);
-    const serverIPs = require("../utils/ipUtils").getServerIPs();
-    const ipConfig = require("../config/ipConfig");
-
-    res.json({
-      clientIP: ipCheck.clientIP,
-      serverIPs: serverIPs,
-      ipRestrictionEnabled: ipConfig.ENABLE_IP_RESTRICTION,
-      isAllowed: ipCheck.isAllowed,
-      reason: ipCheck.reason,
-      allowedIPs: ipConfig.ALLOWED_IPS,
-      allowedSubnets: ipConfig.ALLOWED_SUBNETS,
-      devMode: ipConfig.DEV_MODE,
-      nodeEnv: process.env.NODE_ENV,
-    });
-  } catch (error) {
-    console.error("Error getting IP info:", error);
-    res.status(500).json({ message: "Lỗi máy chủ", error: error.message });
-  }
-};
 
 module.exports = {
   checkIn: exports.checkIn,
@@ -771,5 +752,4 @@ module.exports = {
   getTeamAttendance: exports.getTeamAttendance,
   getAttendanceReport: exports.getAttendanceReport,
   getAdminUserAttendance: exports.getAdminUserAttendance,
-  getIPInfo: exports.getIPInfo,
 };

@@ -63,7 +63,7 @@ export default function WorkDayReports() {
     const excelData = [];
 
     // Header row
-    const header = ['STT', 'Mã NV', 'Tên nhân viên', 'Email', 'Nhóm'];
+    const header = ['STT', 'Mã NV', 'Tên nhân viên', 'Email', 'Bộ phận'];
     const daysInMonth = new Date(year, month, 0).getDate();
     for (let i = 1; i <= daysInMonth; i++) {
       header.push(`${i}`);
@@ -78,7 +78,7 @@ export default function WorkDayReports() {
         userReport.user.employeeId || userReport.user.email,
         `${userReport.user.firstName} ${userReport.user.lastName}`,
         userReport.user.email,
-        userReport.user.group?.name || 'Chưa có nhóm'
+        userReport.user.group?.name || 'Chưa có bộ phận'
       ];
 
       // Add daily data
@@ -113,7 +113,7 @@ export default function WorkDayReports() {
       { width: 12 }, // Mã NV
       { width: 20 }, // Tên
       { width: 25 }, // Email
-      { width: 15 }, // Nhóm
+      { width: 15 }, // bộ phận
     ];
     for (let i = 0; i < daysInMonth; i++) {
       colWidths.push({ width: 10 }); // Các ngày (wider for notes)
@@ -220,7 +220,7 @@ export default function WorkDayReports() {
                     Email
                   </th>
                   <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Nhóm
+                    Bộ phận
                   </th>
                   {Array.from({ length: new Date(year, month, 0).getDate() }, (_, i) => (
                     <th key={i + 1} className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -248,7 +248,7 @@ export default function WorkDayReports() {
                       {userReport.user.email}
                     </td>
                     <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-900 dark:text-gray-100">
-                      {userReport.user.group?.name || 'Chưa có nhóm'}
+                      {userReport.user.group?.name || 'Chưa có bộ phận'}
                     </td>
                     {userReport.dailyData.map((day, dayIndex) => (
                       <td key={dayIndex} className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-center text-xs text-gray-900 dark:text-gray-100">

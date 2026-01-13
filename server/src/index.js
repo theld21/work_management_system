@@ -22,16 +22,13 @@ const PORT = process.env.PORT || 5000;
 // Thiết lập múi giờ Việt Nam (UTC+7)
 process.env.TZ = "Asia/Ho_Chi_Minh";
 console.log(
-  `Timezone set to: ${
-    process.env.TZ
+  `Timezone set to: ${process.env.TZ
   }, Current time: ${new Date().toISOString()}`
 );
 
 // Connect to MongoDB
 connectDB()
   .then(() => {
-    // Setup initial admin user
-    setupAdmin();
     // Initialize cron jobs
     scheduleLeaveDaysCron();
   })
@@ -77,6 +74,7 @@ app.use("/api/device-types", deviceTypeRoutes);
 app.use("/api/devices", deviceRoutes);
 app.use("/api/contracts", contractRoutes);
 app.use("/api/news", newsRoutes);
+
 // Health check endpoint
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "success", message: "Server is running" });

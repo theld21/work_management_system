@@ -163,13 +163,13 @@ export const GroupList: React.FC = () => {
     <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Nhóm</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Bộ phận</h2>
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsCreateModalOpen(true)}
               className="px-4 py-2 bg-brand-500 text-white rounded-md hover:bg-brand-600 dark:bg-brand-600 dark:hover:bg-brand-700"
             >
-              Tạo nhóm
+              Tạo bộ phận
             </button>
           </div>
         </div>
@@ -211,7 +211,7 @@ export const GroupList: React.FC = () => {
                 Thành viên
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                Nhóm cha
+                Bộ phận cha
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Trạng thái

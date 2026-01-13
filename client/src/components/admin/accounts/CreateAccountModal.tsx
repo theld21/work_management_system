@@ -337,14 +337,14 @@ export const CreateAccountModal: React.FC<CreateAccountModalProps> = ({
 
             <div>
               <label htmlFor="group" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Nhóm
+                Bộ phận
               </label>
               <select
                 id="group"
                 className="block w-full rounded-md border-gray-300 shadow-sm p-2 focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
                 {...register('group')}
               >
-                <option value="">Chọn nhóm</option>
+                <option value="">Chọn bộ phận</option>
                 {groups.map((group) => (
                   <option key={group._id} value={group._id}>
                     {group.name}

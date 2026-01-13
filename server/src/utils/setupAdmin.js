@@ -14,9 +14,9 @@ const setupAdmin = async () => {
       const adminUser = new User({
         username: "admin",
         email: "admin@company.com",
-        password: "admin123", // Change this in production
+        password: "123123", // Change this in production
         firstName: "Admin",
-        lastName: "User",
+        lastName: "01",
         role: "admin",
       });
 

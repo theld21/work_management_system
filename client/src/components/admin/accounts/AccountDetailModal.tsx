@@ -66,7 +66,7 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
 }) => {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  
+
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>({
     defaultValues: {
       username: account.username,
@@ -112,7 +112,7 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
   const handleFormSubmit: SubmitHandler<FormValues> = async (data) => {
     setSaving(true);
     setError(null);
-    
+
     try {
       await api.put(`/admin/accounts/${account._id}`, data);
       onUpdate();
@@ -144,7 +144,7 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
             </svg>
           </button>
         </div>
-        
+
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/50 dark:border-red-800">
             <div className="flex">
@@ -169,7 +169,7 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
               <input
                 id="username"
                 className="block w-full rounded-md border-gray-300 shadow-sm p-2 focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-                {...register('username', { 
+                {...register('username', {
                   required: 'Tên đăng nhập là bắt buộc',
                   minLength: {
                     value: 3,
@@ -190,7 +190,7 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
                 id="email"
                 type="email"
                 className="block w-full rounded-md border-gray-300 shadow-sm p-2 focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-                {...register('email', { 
+                {...register('email', {
                   required: 'Email là bắt buộc',
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -210,7 +210,7 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
               <input
                 id="firstName"
                 className="block w-full rounded-md border-gray-300 shadow-sm p-2 focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-                {...register('firstName', { 
+                {...register('firstName', {
                   required: 'Tên là bắt buộc',
                   minLength: {
                     value: 2,
@@ -230,7 +230,7 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
               <input
                 id="lastName"
                 className="block w-full rounded-md border-gray-300 shadow-sm p-2 focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-                {...register('lastName', { 
+                {...register('lastName', {
                   required: 'Họ là bắt buộc',
                   minLength: {
                     value: 2,
@@ -305,14 +305,14 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
 
             <div>
               <label htmlFor="group" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Nhóm
+                Bộ phận
               </label>
               <select
                 id="group"
                 className="block w-full rounded-md border-gray-300 shadow-sm p-2 focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
                 {...register('group')}
               >
-                <option value="">Chọn nhóm</option>
+                <option value="">Chọn bộ phận</option>
                 {groups.map((group) => (
                   <option key={group._id} value={group._id}>
                     {group.name}
@@ -378,14 +378,14 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
           </div>
 
           <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={onClose}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
             >
               Hủy
             </button>
-            <button 
+            <button
               type="submit"
               disabled={saving}
               className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-brand-500 border border-transparent rounded-md shadow-sm hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 disabled:opacity-50 dark:bg-brand-600 dark:hover:bg-brand-700"

@@ -356,7 +356,7 @@ exports.processRequest = async (req, res) => {
         if (role !== "admin" && userGroup?.handleRequestType !== "confirm") {
           return res
             .status(403)
-            .json({ message: "Nhóm của bạn không có quyền xác nhận yêu cầu" });
+            .json({ message: "Bộ phận của bạn không có quyền xác nhận yêu cầu" });
         }
         request.status = RequestStatus.CONFIRMED;
         request.confirmedBy = {
@@ -395,7 +395,7 @@ exports.processRequest = async (req, res) => {
             return res
               .status(403)
               .json({
-                message: "Nhóm của bạn không có quyền phê duyệt yêu cầu",
+                message: "Bộ phận của bạn không có quyền phê duyệt yêu cầu",
               });
           }
         }

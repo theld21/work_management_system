@@ -54,7 +54,7 @@ export const AccountList: React.FC = () => {
       setGroups(response.data.groups || []);
     } catch (err) {
       console.error('Error fetching groups:', err);
-      setError('Không thể tải danh sách nhóm');
+      setError('Không thể tải danh sách bộ phận');
     } finally {
       setLoadingGroups(false);
     }
@@ -208,7 +208,7 @@ export const AccountList: React.FC = () => {
                 Chức vụ
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                Nhóm
+                Bộ phận
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Role

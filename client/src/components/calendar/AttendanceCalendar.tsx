@@ -181,7 +181,7 @@ const AttendanceCalendar = () => {
         const leaveValue = leaveMap.get(formattedDate) ?? 0;
 
         // Skip weekends and future dates for attendance
-        if (!isWorkDay(d) || d > todayDate) {
+        if (!(isWorkDay(d) || attendance) || d > todayDate) {
           // Still show leave requests for weekends/future dates
           if (leaveValue > 0) {
             eventData.push({
@@ -435,13 +435,6 @@ const AttendanceCalendar = () => {
   const hasCheckedIn = todayAttendance && todayAttendance.checkIn;
   const hasCheckedOut = todayAttendance && todayAttendance.checkOut;
 
-  // Tính leaveValue cho hôm nay
-  const todayDateObj = new Date();
-  todayDateObj.setHours(0, 0, 0, 0);
-  const todayKey = formatDate(todayDateObj);
-  const todayLeaveValue = leaveMap?.get ? (leaveMap.get(todayKey) ?? 0) : 0;
-  const todayIsWorkDay = isWorkDay(todayDateObj);
-
   const isAdmin = user?.role === 'admin';
   const selectedUser = users.find(u => u._id === selectedUserId);
 
@@ -509,7 +502,7 @@ const AttendanceCalendar = () => {
                     </div>
                   )}
 
-                  {(!hasCheckedIn && todayLeaveValue !== 1 && todayIsWorkDay) && (
+                  {(!hasCheckedIn) && (
                     <button
                       onClick={handleCheckIn}
                       disabled={checkInLoading}
@@ -519,7 +512,7 @@ const AttendanceCalendar = () => {
                     </button>
                   )}
 
-                  {(hasCheckedIn && !hasCheckedOut && todayLeaveValue !== 1 && todayIsWorkDay) && (
+                  {(hasCheckedIn && !hasCheckedOut) && (
                     <button
                       onClick={handleCheckOut}
                       disabled={checkOutLoading}

@@ -15,7 +15,7 @@ exports.createGroup = async (req, res) => {
 
     // Only admin can create groups
     if (req.user.role !== "admin") {
-      return res.status(403).json({ message: "Không có quyền tạo nhóm" });
+      return res.status(403).json({ message: "Không có quyền tạo bộ phận" });
     }
 
     // Validate handleRequestType
@@ -40,7 +40,7 @@ exports.createGroup = async (req, res) => {
     if (parentGroupId) {
       const parentGroup = await Group.findById(parentGroupId);
       if (!parentGroup) {
-        return res.status(404).json({ message: "Nhóm cha không tồn tại" });
+        return res.status(404).json({ message: "bộ phận cha không tồn tại" });
       }
     }
 
@@ -72,7 +72,7 @@ exports.createGroup = async (req, res) => {
     res.status(201).json(group);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi tạo nhóm" });
+    res.status(500).json({ message: "Lỗi tạo bộ phận" });
   }
 };
 
@@ -83,7 +83,7 @@ exports.getAllGroups = async (req, res) => {
     if (req.user.role !== "admin") {
       return res
         .status(403)
-        .json({ message: "Không có quyền xem tất cả nhóm" });
+        .json({ message: "Không có quyền xem tất cả bộ phận" });
     }
 
     const page = parseInt(req.query.page) || 1;
@@ -131,7 +131,7 @@ exports.getAllGroups = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi lấy nhóm" });
+    res.status(500).json({ message: "Lỗi lấy bộ phận" });
   }
 };
 
@@ -147,7 +147,7 @@ exports.getGroupById = async (req, res) => {
       .populate("members", "firstName lastName username email");
 
     if (!group) {
-      return res.status(404).json({ message: "Nhóm không tồn tại" });
+      return res.status(404).json({ message: "bộ phận không tồn tại" });
     }
 
     // Check authorization - admin or group manager can view
@@ -155,13 +155,13 @@ exports.getGroupById = async (req, res) => {
       req.user.role !== "admin" &&
       group.manager?.toString() !== req.user.id
     ) {
-      return res.status(403).json({ message: "Không có quyền xem nhóm này" });
+      return res.status(403).json({ message: "Không có quyền xem bộ phận này" });
     }
 
     res.json(group);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi lấy nhóm" });
+    res.status(500).json({ message: "Lỗi lấy bộ phận" });
   }
 };
 
@@ -179,12 +179,12 @@ exports.updateGroup = async (req, res) => {
 
     // Only admin can update groups
     if (req.user.role !== "admin") {
-      return res.status(403).json({ message: "Không có quyền cập nhật nhóm" });
+      return res.status(403).json({ message: "Không có quyền cập nhật bộ phận" });
     }
 
     const group = await Group.findById(groupId);
     if (!group) {
-      return res.status(404).json({ message: "Nhóm không tồn tại" });
+      return res.status(404).json({ message: "bộ phận không tồn tại" });
     }
 
     // Validate handleRequestType if provided
@@ -209,7 +209,7 @@ exports.updateGroup = async (req, res) => {
     if (parentGroupId && parentGroupId !== groupId) {
       const parentGroup = await Group.findById(parentGroupId);
       if (!parentGroup) {
-        return res.status(404).json({ message: "Nhóm cha không tồn tại" });
+        return res.status(404).json({ message: "bộ phận cha không tồn tại" });
       }
     }
 
@@ -267,7 +267,7 @@ exports.updateGroup = async (req, res) => {
     res.json(updatedGroup);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi cập nhật nhóm" });
+    res.status(500).json({ message: "Lỗi cập nhật bộ phận" });
   }
 };
 
@@ -285,7 +285,7 @@ exports.addMember = async (req, res) => {
 
     const group = await Group.findById(groupId);
     if (!group) {
-      return res.status(404).json({ message: "Nhóm không tồn tại" });
+      return res.status(404).json({ message: "bộ phận không tồn tại" });
     }
 
     // Get existing member IDs
@@ -299,7 +299,7 @@ exports.addMember = async (req, res) => {
     if (newMemberIds.length === 0) {
       return res
         .status(400)
-        .json({ message: "Tất cả thành viên đã có trong nhóm" });
+        .json({ message: "Tất cả thành viên đã có trong bộ phận" });
     }
 
     // Verify all users exist
@@ -322,8 +322,8 @@ exports.addMember = async (req, res) => {
       group,
     });
   } catch (error) {
-    console.error("Lỗi thêm thành viên vào nhóm:", error);
-    res.status(500).json({ message: "Lỗi thêm thành viên vào nhóm" });
+    console.error("Lỗi thêm thành viên vào bộ phận:", error);
+    res.status(500).json({ message: "Lỗi thêm thành viên vào bộ phận" });
   }
 };
 
@@ -336,12 +336,12 @@ exports.removeMember = async (req, res) => {
     if (req.user.role !== "admin") {
       return res
         .status(403)
-        .json({ message: "Không có quyền xóa thành viên khỏi nhóm" });
+        .json({ message: "Không có quyền xóa thành viên khỏi bộ phận" });
     }
 
     const group = await Group.findById(groupId);
     if (!group) {
-      return res.status(404).json({ message: "Nhóm không tồn tại" });
+      return res.status(404).json({ message: "bộ phận không tồn tại" });
     }
 
     // Remove user from group
@@ -362,7 +362,7 @@ exports.removeMember = async (req, res) => {
     res.json(updatedGroup);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi xóa nhóm" });
+    res.status(500).json({ message: "Lỗi xóa bộ phận" });
   }
 };
 
@@ -373,12 +373,12 @@ exports.deleteGroup = async (req, res) => {
 
     // Only admin can delete groups
     if (req.user.role !== "admin") {
-      return res.status(403).json({ message: "Không có quyền xóa nhóm" });
+      return res.status(403).json({ message: "Không có quyền xóa bộ phận" });
     }
 
     const group = await Group.findById(groupId);
     if (!group) {
-      return res.status(404).json({ message: "Nhóm không tồn tại" });
+      return res.status(404).json({ message: "bộ phận không tồn tại" });
     }
 
     // Remove group from parent's childGroups array
@@ -394,7 +394,7 @@ exports.deleteGroup = async (req, res) => {
     // Delete the group
     await Group.findByIdAndDelete(groupId);
 
-    res.json({ message: "Nhóm đã được xóa thành công" });
+    res.json({ message: "bộ phận đã được xóa thành công" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Lỗi lấy tất cả người dùng" });
