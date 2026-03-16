@@ -1,48 +1,75 @@
-# Hệ Thống Quản Lý chấm công (Attendance System Management)
+# 👥 Attendance Management System
 
-## Tổng Quan
-Dự án là một hệ thống quản lý chấm công toàn diện, được xây dựng với mục tiêu số hóa quy trình quản lý nhân sự, theo dõi thời gian làm việc và quản lý các yêu cầu nghỉ phép. Hệ thống bao gồm đầy đủ các tính năng cho Admin, Manager và Nhân viên.
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
-### Công Nghệ Sử Dụng (Tech Stack)
--   **Frontend**: ReactJS, TailwindCSS.
--   **Backend**: Express.js.
--   **Database**: MongoDB.
--   **Containerization**: Docker.
+## 📌 Overview
+
+The **Attendance Management System** is a comprehensive, full-stack solution designed to streamline HR workflows, digitize time tracking, and simplify leave request management. Built with modern web technologies, it provides secure, role-based access control with tailored features for **Admins**, **Managers**, and **Employees**.
+
+## ✨ Key Features
+
+- **Role-Based Access Control (RBAC):** Distinct portals and capabilities for different user roles.
+- **Real-Time Attendance Tracking:** Secure check-in/check-out mechanisms.
+- **Leave Management Workflow:** Multi-tier approval system for leave requests (Employee ➡️ Manager ➡️ Admin).
+- **Automated Leave Accrual:** Scheduled cron jobs automatically calculate and allocate leave days.
+- **Internal Announcements:** Admins can publish news and updates directly to employee dashboards.
+
+## 🛠 Tech Stack
+
+- **Frontend:** ReactJS, Tailwind CSS
+- **Backend:** Express.js (Node.js)
+- **Database:** MongoDB
+- **Infrastructure:** Docker & Docker Compose
 
 ---
 
-## Các Công Cụ Cần Thiết
-1.  **Docker Desktop**: Dùng để chạy môi trường server và database.
-    -   [Tải Docker Desktop](https://www.docker.com/products/docker-desktop/)
-2.  **MongoDB Compass**: Giao diện trực quan để quản lý và xem dữ liệu MongoDB.
-    -   [Tải MongoDB Compass](https://www.mongodb.com/products/tools/compass)
+## 🚀 Getting Started
 
----
+Follow these instructions to get the project up and running on your local machine for development and testing purposes.
 
-## Hướng Dẫn Cài Đặt & Chạy Dự Án
+### Prerequisites
 
-### 1. Khởi chạy hệ thống với Docker
+Ensure you have the following installed on your local machine:
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Required to run the containerized environment)
+- [MongoDB Compass](https://www.mongodb.com/products/tools/compass) (Optional, but recommended for visually managing the database)
 
+### Installation & Setup
+
+**1. Boot up the environment**  
+Start the application and its database using Docker Compose:
 ```bash
 docker compose up --build
 ```
+*The frontend, backend, and database will be orchestrated automatically.*
 
-### 2. Khởi tạo tài khoản Admin
-*Tài khoản mặc định: `admin` / `123123`*
+---
+
+## ⚙️ Administrative Scripts
+
+The system comes with several utility scripts to ease setup and testing. Run these from your terminal while the Docker containers are active.
+
+### Initialize Admin Account
+Setup the default system administrator.
+- **Username:** `admin`
+- **Password:** `123123`
 
 ```bash
 docker compose exec server node src/utils/setupAdmin.js
 ```
 
-### 3. Cộng thêm ngày nghỉ phép (Thủ công)
-Hệ thống có cronjob chạy tự động, nhưng bạn có thể chạy thủ công lệnh cộng thêm ngày phép cho tất cả nhân viên trong hệ thống:
+### Manual Leave Days Calculation
+While the system features an automated cron job for leave management, you can trigger the calculation manually at any time:
 
 ```bash
 docker compose exec server node src/utils/calculateLeaveDays.js
 ```
 
-### 4. Tạo dữ liệu check-in mẫu (Seeding Data)
-*Lưu ý: Lệnh này sẽ tạo dữ liệu chấm công cho các nhân viên (không phải admin) từ tháng 6/2025 đến hiện tại.*
+### Seed Mock Attendance Data
+Populate the database with mock attendance records for non-admin employees (spanning from June 2025 to the present day) to facilitate testing.
 
 ```bash
 docker compose exec server node src/utils/seedAttendance.js
@@ -50,25 +77,22 @@ docker compose exec server node src/utils/seedAttendance.js
 
 ---
 
-## Quy Trình Test Chức Năng (User Flows)
+## 📝 User Testing Flows
 
-### 1. Khởi tạo dữ liệu cơ bản
-1.  Đăng nhập bằng tài khoản Admin (`admin`/`123123`).
-2.  **Tạo Phòng Ban (Groups)**: Vào quản lý phòng ban -> Thêm mới 
-*Ví dụ: Ban Giám đốc (quyền phê duyệt request), Division 1, Division 2 (quyền xác nhận request, group cha là Ban Giám Đốc), *.
-3.  **Tạo Nhân Viên**: Vào quản lý nhân viên -> Thêm mới user -> Gán vào phòng ban tương ứng.
-4.  **Thêm người quản lý phòng ban**: Vào quản lý phòng ban -> Thêm người quản lý cho các phòng ban.
+If you are testing the system, follow these standard operational procedures:
 
-### 2. Kiểm tra quy trình Nghỉ Phép (Leave Request)
-1.  **Tạo request**: Đăng nhập tài khoản Nhân viên -> Tạo đơn xin nghỉ phép.
-2.  **Duyệt request (Manager)**: Đăng nhập tài khoản trưởng phòng đang quản lý nhân viên -> Duyệt request của nhân viên thuộc phòng ban mình -> Đăng nhập tài khoản CEO cấp cao hơn -> Duyệt request của nhân viên mà trưởng phòng đã xác nhận.
-3.  **Duyệt request (Admin)**: Admin có quyền duyệt tất cả đơn.
+### 1. Master Setup
+1. Log in with the **Admin** account.
+2. Navigate to **Department Management** to create organizational units (e.g., Board of Directors, Engineering Division).
+3. Navigate to **Employee Management** to onboard new users and assign them to their respective departments.
+4. Assign managers to these departments to enable the approval hierarchy.
 
-### 3. Kiểm tra Chấm Công (Attendance)
-1.  Sử dụng chức năng "Điểm danh" (Check-in) và "Kết thúc" (Check-out) trên giao diện Dashboard.
-2.  Kiểm tra lịch sử chấm công trong mục "Lịch làm việc".
-3.  Admin có thể xem chấm công của toàn bộ nhân viên.
+### 2. Leave Request Cycle
+1. **Employee:** Logs in and submits a leave request.
+2. **Manager:** Logs in, reviews, and initially approves the subordinate's request.
+3. **Executive/Admin:** Logs in for the final approval.
 
-### 4. Kiểm tra Tin Tức (News)
-1.  Admin đăng bài viết thông báo mới.
-2.  Nhân viên nhận được thông báo và xem bài viết trên trang chủ.
+### 3. Daily Attendance
+1. Employees use the **Check-in** and **Check-out** actions from their Dashboard.
+2. Users can review their personal logs in the **Work Schedule** tab.
+3. Admins have global visibility over all attendance records.
